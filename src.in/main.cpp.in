@@ -1,0 +1,22 @@
+#include <cuda_runtime.h>
+
+#include "cuda_streams.hpp"
+#include "buffer_alloc.hpp"
+#include "edges.hpp"
+#include "util.hpp"
+
+int main() {
+	cuda_streams_init({:cuda_stream_count:});
+	buffer_alloc();
+	buffer_fill();
+
+	while(true) {
+		//if input ready {
+{:net_execution:}
+		//} else {
+			util_sleep(33);
+		//}
+	}
+
+	return 0;
+}

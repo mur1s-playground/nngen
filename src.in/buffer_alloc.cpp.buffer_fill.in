@@ -1,0 +1,6 @@
+	{
+		float *tmp_ptr = (float *) malloc({:params_size:} * sizeof(float));
+		util_file_read({:params_filename:}, 0, {:params_size:} * sizeof(float), (char *)tmp_ptr);
+		cudaMemcpy({:params_dev_ptr:}, tmp_ptr, {:params_size:} * sizeof(float), cudaMemcpyHostToDevice);
+		free(tmp_ptr);
+	}

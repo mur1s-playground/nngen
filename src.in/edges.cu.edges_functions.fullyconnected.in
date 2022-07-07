@@ -1,0 +1,7 @@
+const unsigned int bias_offset = {:output_nodes_count:} * {:input_nodes_count:};
+		for (int o_r = 0; o_r < {:output_nodes_count:}; o_r++) {
+			out[output_base_idx + o_r] = params[bias_offset + o_r];
+			for (int i_c = 0; i_c < {:input_nodes_count:}; i_c++) {
+				out[output_base_idx + o_r] += params[o_r * {:input_nodes_count:} + i_c] * in[i * {:input_nodes_count:} + i_c]; 
+			}
+		}

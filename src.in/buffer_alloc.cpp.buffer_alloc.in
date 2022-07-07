@@ -1,0 +1,1 @@
+	cudaMalloc(&{:dev_ptr:}, {:size:});

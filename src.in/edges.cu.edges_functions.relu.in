@@ -1,0 +1,3 @@
+for (int o_r = 0; o_r < {:output_nodes_count:}; o_r++) {
+			out[output_base_idx + o_r] = (in[output_base_idx + o_r] >= 0) * in[output_base_idx + o_r]; 
+		}

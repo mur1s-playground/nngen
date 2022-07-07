@@ -1,0 +1,19 @@
+{
+			for (int f = 0; f < {:filters_c:}; f++) {
+				for (int i_c = 0; i_c < {:input_channels:}; i_c++) {
+					for (int o_r = 0; o_r < {:filter_output_rows:}; o_r++) {
+						for (int o_c = 0; o_c < {:filter_output_cols:}; o_c++) {
+							float value_f = 0.0f;
+							for (int k_x = 0; k_x < {:kernel_size_x:}; k_x += {:kernel_dilation_x:}) {
+								for (int k_y = 0; k_y < {:kernel_size_y:}; k_y += {:kernel_dilation_y:}) {
+									float kernel_f = params[{:kernel_prefix_sum:} + f * {:kernel_size_y:} * {:kernel_size_x:} + k_y * {:kernel_size_x:} + k_x];
+									unsigned int input_idx = i * {:input_channels:} * {:input_rows:} * {:input_cols:} + i_c * {:input_rows:} * {:input_cols:} + (o_r * {:kernel_stride_y:} + k_y) * {:input_cols:} + (o_c * {:kernel_stride_x:} + k_x);
+									value_f += kernel_f * in[input_idx];
+								}
+							}
+							out[output_base_idx + {:output_prefix_sum:} + f * {:input_channels:} * {:filter_output_rows:} * {:filter_output_cols:} + i_c * {:filter_output_rows:} * {:filter_output_cols:} +  o_r * {:filter_output_cols:} + o_c];
+						}
+					}
+				}
+			}
+		}

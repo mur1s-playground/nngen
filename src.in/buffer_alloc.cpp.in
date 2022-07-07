@@ -1,0 +1,17 @@
+#include "buffer_alloc.hpp"
+
+#include <cuda_runtime.h>
+#include <cstdlib>
+
+#include "util.hpp" 
+
+{:dev_ptrs:}
+{:edges_params_ptrs:}
+
+void buffer_alloc() {
+{:buffer_alloc_content:}
+}
+
+void buffer_fill() {
+{:buffer_fill_content:}
+}

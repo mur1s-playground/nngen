@@ -1,0 +1,1 @@
+extern float *{:edge_id:}_dev_ptr;

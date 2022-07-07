@@ -1,0 +1,7 @@
+#pragma once
+
+{:dev_ptrs:}
+{:edges_params_ptrs:}
+
+void buffer_alloc();
+void buffer_fill();

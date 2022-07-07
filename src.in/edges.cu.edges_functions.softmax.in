@@ -1,0 +1,11 @@
+{
+		float summed = 0.0f;
+        for (int c = 0; c < {:output_nodes_count:}; c++) {
+                out[output_base_idx + c] = exp(in[output_base_idx + c]);
+                summed += out[output_base_idx + c];
+        }
+
+        for (int c = 0; c < {:output_nodes_count:}; c++) {
+        	if (summed > 0) out[output_base_idx + c] /= summed;
+        }
+	}

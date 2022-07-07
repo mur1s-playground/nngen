@@ -1,0 +1,6 @@
+#include "edges.hpp"
+
+#include "buffer_alloc.hpp"
+#include "cuda_streams.hpp"
+
+{:edges_functions:}

@@ -1,0 +1,22 @@
+/*
+ * cuda_streams.cpp
+ *
+ *  Created on: Jul 5, 2022
+ *      Author: mur1
+ */
+
+#include "cuda_streams.hpp"
+
+cudaStream_t *cuda_streams = nullptr;
+
+void cuda_streams_init(unsigned int count) {
+	cuda_streams = new cudaStream_t[count];
+
+	for (int i = 0; i < count; i++) {
+		cudaStreamCreate(&cuda_streams[i]);
+	}
+
+}
+
+
+

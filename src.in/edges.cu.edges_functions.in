@@ -1,0 +1,17 @@
+__global__ void {:edge_id:}_kernel(const float *in, const float *params, float *out) {
+	int i = blockIdx.x * blockDim.x + threadIdx.x;
+
+	if (i < {:batch_size:}) {
+		const unsigned int output_base_idx = i * {:layer_output_width:};
+		
+		{:kernel_content:}
+	} 
+}
+
+void launch_{:edge_id:}_kernel() {
+	const int threads_per_block = 256;
+    const int blocks_per_grid = ({:batch_size:} + threads_per_block - 1)/threads_per_block;
+    
+    {:edge_id:}_kernel <<< blocks_per_grid, threads_per_block, 0, {:launch_cuda_stream:} >>> ({:dev_ptr_input:}, {:dev_ptr_params:}, {:dev_ptr_output:});
+    //cudaEventRecord({:edge_id:}_finished_event);
+}

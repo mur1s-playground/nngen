@@ -1,0 +1,11 @@
+nsyodpqxejuvckwh,padlslaifgvsvexi,svtowitmnjwkgdow,1,convolution_2d,4,4,3,3,1,1,1,1,1,1
+ejouwxcpljiftpmt,svtowitmnjwkgdow,erjwejfjpccmgbuy,1,relu
+yxffajqbtoswqrpb,erjwejfjpccmgbuy,wpotxihmrewyimvm,1,maxpool_2d,1,1,3,3,1,1,3,3,1,1
+kltmpmjhrmgrtjhg,wpotxihmrewyimvm,efjippsgrusywoyt,1,relu
+xdrgbxgkxqftpjqa,efjippsgrusywoyt,lppxfcelajxqccyr,1,fullyconnected,10
+kmdwtwruixhmxkvl,lppxfcelajxqccyr,sklahvaskljhskjh,1,relu
+mngghxgyiykuvxdv,flkwstryqjslmvni,aligmhsualfldadj,1,fullyconnected,10
+aewooyypjykeaonm,aligmhsualfldadj,oibogryiupjpujbh,1,softmax
+asfljvkjnakjvbad,erjwejfjpccmgbuy,nafjlegkjbdkgjbd,1,fullyconnected,20
+cjkbavdkjbadkjbv,nafjlegkjbdkgjbd,sklahvaskljhskjh,1,relu
+vvbabehgakhgshhg,sklahvaskljhskjh,flkwstryqjslmvni,1,concat
