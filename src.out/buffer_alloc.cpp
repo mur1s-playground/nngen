@@ -18,15 +18,15 @@ float *mngghxgyiykuvxdv_dev_ptr = nullptr;
 
 
 void buffer_alloc() {
-	cudaMalloc(&nsyodpqxejuvckwh_dev_ptr, 144);
-	cudaMalloc(&yxffajqbtoswqrpb_dev_ptr, 36);
-	cudaMalloc(&xdrgbxgkxqftpjqa_dev_ptr, 10);
-	cudaMalloc(&asfljvkjnakjvbad_dev_ptr, 20);
-	cudaMalloc(&mngghxgyiykuvxdv_dev_ptr, 10);
-	cudaMalloc(&dev_ptr_0_0, 10816);
-	cudaMalloc(&dev_ptr_0_1, 10816);
-	cudaMalloc(&dev_ptr_1_0, 120);
-	cudaMalloc(&dev_ptr_1_1, 120);
+	cudaMalloc(&nsyodpqxejuvckwh_dev_ptr, 144 * sizeof(float));
+	cudaMalloc(&yxffajqbtoswqrpb_dev_ptr, 36 * sizeof(float));
+	cudaMalloc(&xdrgbxgkxqftpjqa_dev_ptr, 10 * sizeof(float));
+	cudaMalloc(&asfljvkjnakjvbad_dev_ptr, 20 * sizeof(float));
+	cudaMalloc(&mngghxgyiykuvxdv_dev_ptr, 10 * sizeof(float));
+	cudaMalloc(&dev_ptr_0_0, 108160000 * sizeof(float));
+	cudaMalloc(&dev_ptr_0_1, 108160000 * sizeof(float));
+	cudaMalloc(&dev_ptr_1_0, 1200000 * sizeof(float));
+	cudaMalloc(&dev_ptr_1_1, 1200000 * sizeof(float));
 
 }
 

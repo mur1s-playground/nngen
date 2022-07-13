@@ -22,7 +22,7 @@ __global__ void nsyodpqxejuvckwh_0_kernel(const float *in, const float *params, 
 									value_f += kernel_f * in[input_idx];
 								}
 							}
-							out[output_base_idx + 0 + f * 1 * 26 * 26 + i_c * 26 * 26 +  o_r * 26 + o_c];
+							out[output_base_idx + 0 + f * 1 * 26 * 26 + i_c * 26 * 26 +  o_r * 26 + o_c] = value_f;
 						}
 					}
 				}
@@ -36,8 +36,9 @@ void launch_nsyodpqxejuvckwh_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    nsyodpqxejuvckwh_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_1 + 0, nsyodpqxejuvckwh_dev_ptr, dev_ptr_0_0 + 0);
-    //cudaEventRecord(nsyodpqxejuvckwh_0_finished_event);
+
+    nsyodpqxejuvckwh_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_1 + 0, nsyodpqxejuvckwh_dev_ptr, dev_ptr_0_0 + 0);
+
 }
 __global__ void ejouwxcpljiftpmt_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -56,8 +57,10 @@ void launch_ejouwxcpljiftpmt_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    ejouwxcpljiftpmt_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
-    //cudaEventRecord(ejouwxcpljiftpmt_0_finished_event);
+
+    ejouwxcpljiftpmt_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
+	cudaEventRecord(ejouwxcpljiftpmt_finished_event, cuda_streams[2]);
+
 }
 __global__ void yxffajqbtoswqrpb_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -79,7 +82,7 @@ __global__ void yxffajqbtoswqrpb_0_kernel(const float *in, const float *params, 
 									value_f = (value_tmp > value_f) * value_tmp + (value_tmp <= value_f) * value_f;
 								}
 							}
-							out[output_base_idx + 0 + f * 4 * 8 * 8 + i_c * 8 * 8 +  o_r * 8 + o_c];
+							out[output_base_idx + 0 + f * 4 * 8 * 8 + i_c * 8 * 8 +  o_r * 8 + o_c] = value_f;
 						}
 					}
 				}
@@ -93,8 +96,10 @@ void launch_yxffajqbtoswqrpb_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    yxffajqbtoswqrpb_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_1 + 0, yxffajqbtoswqrpb_dev_ptr, dev_ptr_0_0 + 0);
-    //cudaEventRecord(yxffajqbtoswqrpb_0_finished_event);
+	cudaStreamWaitEvent(cuda_streams[2], ejouwxcpljiftpmt_finished_event);
+
+    yxffajqbtoswqrpb_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_1 + 0, yxffajqbtoswqrpb_dev_ptr, dev_ptr_0_0 + 0);
+
 }
 __global__ void kltmpmjhrmgrtjhg_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -113,8 +118,9 @@ void launch_kltmpmjhrmgrtjhg_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    kltmpmjhrmgrtjhg_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
-    //cudaEventRecord(kltmpmjhrmgrtjhg_0_finished_event);
+
+    kltmpmjhrmgrtjhg_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
+
 }
 __global__ void xdrgbxgkxqftpjqa_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -137,8 +143,9 @@ void launch_xdrgbxgkxqftpjqa_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    xdrgbxgkxqftpjqa_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_1 + 0, xdrgbxgkxqftpjqa_dev_ptr + 0, dev_ptr_0_0 + 0);
-    //cudaEventRecord(xdrgbxgkxqftpjqa_0_finished_event);
+
+    xdrgbxgkxqftpjqa_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_1 + 0, xdrgbxgkxqftpjqa_dev_ptr + 0, dev_ptr_0_0 + 0);
+
 }
 __global__ void kmdwtwruixhmxkvl_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -157,8 +164,10 @@ void launch_kmdwtwruixhmxkvl_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    kmdwtwruixhmxkvl_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
-    //cudaEventRecord(kmdwtwruixhmxkvl_0_finished_event);
+
+    kmdwtwruixhmxkvl_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_0 + 0, nullptr, dev_ptr_0_1 + 0);
+	cudaEventRecord(kmdwtwruixhmxkvl_finished_event, cuda_streams[2]);
+
 }
 __global__ void asfljvkjnakjvbad_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -181,8 +190,10 @@ void launch_asfljvkjnakjvbad_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    asfljvkjnakjvbad_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[1] >>> (dev_ptr_0_1 + 0, asfljvkjnakjvbad_dev_ptr + 0, dev_ptr_1_0 + 0);
-    //cudaEventRecord(asfljvkjnakjvbad_0_finished_event);
+	cudaStreamWaitEvent(cuda_streams[3], ejouwxcpljiftpmt_finished_event);
+
+    asfljvkjnakjvbad_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[3] >>> (dev_ptr_0_1 + 0, asfljvkjnakjvbad_dev_ptr + 0, dev_ptr_1_0 + 0);
+
 }
 __global__ void cjkbavdkjbadkjbv_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -201,8 +212,10 @@ void launch_cjkbavdkjbadkjbv_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    cjkbavdkjbadkjbv_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[1] >>> (dev_ptr_1_0 + 0, nullptr, dev_ptr_0_1 + 10);
-    //cudaEventRecord(cjkbavdkjbadkjbv_0_finished_event);
+
+    cjkbavdkjbadkjbv_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[3] >>> (dev_ptr_1_0 + 0, nullptr, dev_ptr_0_1 + 10);
+	cudaEventRecord(cjkbavdkjbadkjbv_finished_event, cuda_streams[3]);
+
 }
 __global__ void vvbabehgakhgshhg_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -221,8 +234,11 @@ void launch_vvbabehgakhgshhg_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    vvbabehgakhgshhg_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_1 + 0, nullptr, dev_ptr_0_0 + 0);
-    //cudaEventRecord(vvbabehgakhgshhg_0_finished_event);
+	cudaStreamWaitEvent(cuda_streams[2], kmdwtwruixhmxkvl_finished_event);
+	cudaStreamWaitEvent(cuda_streams[2], cjkbavdkjbadkjbv_finished_event);
+
+    vvbabehgakhgshhg_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_1 + 0, nullptr, dev_ptr_0_0 + 0);
+
 }
 __global__ void mngghxgyiykuvxdv_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -245,8 +261,9 @@ void launch_mngghxgyiykuvxdv_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    mngghxgyiykuvxdv_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_0 + 0, mngghxgyiykuvxdv_dev_ptr + 0, dev_ptr_0_1 + 0);
-    //cudaEventRecord(mngghxgyiykuvxdv_0_finished_event);
+
+    mngghxgyiykuvxdv_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_0 + 0, mngghxgyiykuvxdv_dev_ptr + 0, dev_ptr_0_1 + 0);
+
 }
 __global__ void aewooyypjykeaonm_0_kernel(const float *in, const float *params, float *out) {
 	int i = blockIdx.x * blockDim.x + threadIdx.x;
@@ -273,7 +290,9 @@ void launch_aewooyypjykeaonm_0_kernel() {
 	const int threads_per_block = 256;
     const int blocks_per_grid = (10000 + threads_per_block - 1)/threads_per_block;
     
-    aewooyypjykeaonm_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[0] >>> (dev_ptr_0_1 + 0, nullptr, dev_ptr_0_0 + 0);
-    //cudaEventRecord(aewooyypjykeaonm_0_finished_event);
+
+    aewooyypjykeaonm_0_kernel <<< blocks_per_grid, threads_per_block, 0, cuda_streams[2] >>> (dev_ptr_0_1 + 0, nullptr, dev_ptr_0_0 + 0);
+	cudaEventRecord(aewooyypjykeaonm_finished_event, cuda_streams[2]);
+
 }
 

@@ -11,7 +11,14 @@
 
 extern cudaStream_t *cuda_streams;
 
+extern cudaEvent_t ejouwxcpljiftpmt_finished_event;
+extern cudaEvent_t kmdwtwruixhmxkvl_finished_event;
+extern cudaEvent_t cjkbavdkjbadkjbv_finished_event;
+extern cudaEvent_t aewooyypjykeaonm_finished_event;
+
+
 void cuda_streams_init(unsigned int count);
+
 
 
 

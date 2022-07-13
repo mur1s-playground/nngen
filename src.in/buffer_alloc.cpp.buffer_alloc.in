@@ -1,1 +1,1 @@
-	cudaMalloc(&{:dev_ptr:}, {:size:});
+	cudaMalloc(&{:dev_ptr:}, {:size:} * sizeof(float));

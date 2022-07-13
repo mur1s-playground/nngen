@@ -11,7 +11,7 @@
 									value_f += kernel_f * in[input_idx];
 								}
 							}
-							out[output_base_idx + {:output_prefix_sum:} + f * {:input_channels:} * {:filter_output_rows:} * {:filter_output_cols:} + i_c * {:filter_output_rows:} * {:filter_output_cols:} +  o_r * {:filter_output_cols:} + o_c];
+							out[output_base_idx + {:output_prefix_sum:} + f * {:input_channels:} * {:filter_output_rows:} * {:filter_output_cols:} + i_c * {:filter_output_rows:} * {:filter_output_cols:} +  o_r * {:filter_output_cols:} + o_c] = value_f;
 						}
 					}
 				}

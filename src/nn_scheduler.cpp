@@ -182,6 +182,11 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 	std::vector<std::string> edges_cu_edges_functions_maxpool2d_in = util_file_read("src.in/edges.cu.edges_functions.maxpool2d.in");
 	std::vector<std::string> edges_cu_edges_functions_in = util_file_read("src.in/edges.cu.edges_functions.in");
 
+	std::vector<std::string> cuda_streams_cpp_in = util_file_read("src.in/cuda_streams.cpp.in");
+	std::vector<std::string> cuda_streams_hpp_in = util_file_read("src.in/cuda_streams.hpp.in");
+	std::vector<std::string> cuda_streams_edges_events_ptrs_prefixes = std::vector<std::string>();
+
+
 	std::stringstream buffer_alloc_cpp_edges_params_ptrs;
 	std::stringstream buffer_alloc_hpp_edges_params_ptrs;
 	std::stringstream buffer_alloc_content;
@@ -209,7 +214,7 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 			bool swap = true;
 
 			std::stringstream cuda_stream_name;
-			cuda_stream_name << "cuda_streams[" << seg << "]";
+			cuda_stream_name << "cuda_streams[" << seg + 2 << "]";
 
 			int segment_start_idx = segments_groups.data[sg_pos];		sg_pos++;
 			int first_node_idx = segments_starts.data[segment_start_idx] + 1;
@@ -355,6 +360,32 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 											dev_ptr_params_offset_ptr << dev_ptr_name.str();// << " + " << params_offset;
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", dev_ptr_params_offset_ptr.str());
 
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -492,6 +523,33 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 											dev_ptr_params_offset_ptr << dev_ptr_name.str();// << " + " << params_offset;
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", dev_ptr_params_offset_ptr.str());
 
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -569,6 +627,36 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 
 											std::string nullptr_str("nullptr");
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", nullptr_str);
+
+
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
+
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -648,6 +736,35 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 
 											std::string nullptr_str("nullptr");
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", nullptr_str);
+
+
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -727,6 +844,34 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 
 											std::string nullptr_str("nullptr");
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", nullptr_str);
+
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -845,6 +990,33 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 											dev_ptr_params_offset_ptr << dev_ptr_name.str() << " + " << params_offset;
 											repl = util_replace_into(repl, "{:dev_ptr_params:}", dev_ptr_params_offset_ptr.str());
 
+
+											std::stringstream wait_events;
+											wait_events << "";
+											if (sg > 0 && ssi == first_node_idx) {
+												for (int e_s = 0; e_s < edges_c; e_s++) {
+													struct nn_edge *nn_e_s = &nn_g->edges.data[e_s];
+
+													if (strcmp(nn_e_s->id_to, nn_n_from->id) == 0) {
+														wait_events << "\tcudaStreamWaitEvent(" << cuda_stream_name.str() << ", " << nn_e_s->id << "_finished_event);\n";
+													}
+												}
+											}
+											repl = util_replace_into(repl, "{:edge_id_wait_events:}", wait_events.str());
+
+											std::stringstream record_event;
+											record_event << "";
+											if (ssi+2 == segments_c || nn_g->segments.data[ssi+2] < 0) {
+												std::stringstream event_name;
+												event_name << nn_e->id << "_finished_event";
+												std::string event_name_str(event_name.str());
+
+												record_event << "\tcudaEventRecord(" << event_name_str << ", "<< cuda_stream_name.str() << ");\n";
+
+												if (l == 0) cuda_streams_edges_events_ptrs_prefixes.push_back(event_name_str);
+											}
+											repl = util_replace_into(repl, "{:edge_id_finished_event:}", record_event.str());
+
 											edges_cu_edges_functions << repl << "\n";
 										}
 
@@ -907,7 +1079,7 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 				std::vector<std::string> buffer_alloc = util_file_read("src.in/buffer_alloc.cpp.buffer_alloc.in");
 				for (int l = 0; l < buffer_alloc.size(); l++) {
 					std::stringstream ss_value;
-					ss_value << max_buffer_sizes.data[2 * ms + i];
+					ss_value << max_buffer_sizes.data[2 * ms + i] * batch_size;
 
 					std::string replaced = util_replace_into(buffer_alloc[l], "{:dev_ptr:}", ss_dev_ptr.str());
 					replaced = util_replace_into(replaced, "{:size:}", ss_value.str());
@@ -982,9 +1154,11 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 						}
 
 						//tmp global sync
+						/*
 						if ((sg > 0 && segment_ssi_cur_offset[seg] == 0) || nn_n_to->type == NN_N_T_OUTPUT) {
 							net_execution << "\t\t\tcudaDeviceSynchronize();" << "\n";
 						}
+						*/
 						break;
 					}
 				}
@@ -1001,13 +1175,74 @@ void nn_scheduler_schedule(struct nn_scheduler *nn_s) {
 		free(ssi_term);
 	}
 
+
+	std::stringstream event_ptrs_cpp;
+	std::stringstream event_ptrs_hpp;
+	std::stringstream event_ptrs_init;
+	for (int ep = 0; ep < cuda_streams_edges_events_ptrs_prefixes.size(); ep++) {
+		event_ptrs_cpp << "cudaEvent_t " << cuda_streams_edges_events_ptrs_prefixes[ep] << ";\n";
+		event_ptrs_hpp << "extern cudaEvent_t " << cuda_streams_edges_events_ptrs_prefixes[ep] << ";\n";
+		event_ptrs_init << "\tcudaEventCreateWithFlags(&" << cuda_streams_edges_events_ptrs_prefixes[ep] << ", cudaEventDisableTiming);\n";
+	}
+
+	for (int l = 0; l < cuda_streams_cpp_in.size(); l++) {
+		cuda_streams_cpp_in[l] = util_replace_into(cuda_streams_cpp_in[l], "{:edges_events_ptrs:}", event_ptrs_cpp.str());
+		cuda_streams_cpp_in[l] = util_replace_into(cuda_streams_cpp_in[l], "{:edges_events_init:}", event_ptrs_init.str());
+	}
+	std::stringstream cuda_streams_cpp_out;
+	cuda_streams_cpp_out << "src.out/cuda_streams.cpp";
+	util_file_write(cuda_streams_cpp_out.str().c_str(), cuda_streams_cpp_in);
+
+	for (int l = 0; l < cuda_streams_hpp_in.size(); l++) {
+		cuda_streams_hpp_in[l] = util_replace_into(cuda_streams_hpp_in[l], "{:edges_events_ptrs:}", event_ptrs_hpp.str());
+	}
+	std::stringstream cuda_streams_hpp_out;
+	cuda_streams_hpp_out << "src.out/cuda_streams.hpp";
+	util_file_write(cuda_streams_hpp_out.str().c_str(), cuda_streams_hpp_in);
+
+
+	struct nn_node *input_node = nullptr;
+	struct nn_node *output_node = nullptr;
+	std::stringstream output_finished_event_ss;
+	for (int n = 0; n < m_array_size(&nn_g->nodes); n++) {
+		if (nn_g->nodes.data[n].type == NN_N_T_INPUT) {
+			input_node = &nn_g->nodes.data[n];
+		} else if (nn_g->nodes.data[n].type == NN_N_T_OUTPUT) {
+			output_node = &nn_g->nodes.data[n];
+
+			//tmp single edge into output
+			for (int e = 0; e < m_array_size(&nn_g->edges); e++) {
+				struct nn_edge *nn_e = &nn_g->edges.data[e];
+				if (strcmp(nn_e->id_to, output_node->id) == 0) {
+					output_finished_event_ss << nn_e->id << "_finished_event";
+					break;
+				}
+			}
+		}
+	}
+
 	for (int l = 0; l < main_cpp_in.size(); l++) {
 		main_cpp_in[l] = util_replace_into(main_cpp_in[l], "{:net_execution:}", net_execution.str());
-		main_cpp_in[l] = util_replace_into(main_cpp_in[l], "{:cuda_stream_count:}", util_string_from_uint(max_group_elements));
+		main_cpp_in[l] = util_replace_into(main_cpp_in[l], "{:cuda_stream_count:}", util_string_from_uint(max_group_elements + 2));
+		main_cpp_in[l] = util_replace_into(main_cpp_in[l], "{:net_finished_event:}", output_finished_event_ss.str().c_str());
+		main_cpp_in[l] = util_replace_into(main_cpp_in[l], "{:net_output_ptr:}", output_node->last_used_buffer_str);
 	}
 	std::stringstream main_cpp_out;
 	main_cpp_out << "src.out/main.cpp";
 	util_file_write(main_cpp_out.str().c_str(), main_cpp_in);
+
+	//tmp single input/output
+	std::vector<std::string> input_stream_cpp_in = util_file_read("src.in/input_stream.cpp.in");
+	for (int l = 0; l < input_stream_cpp_in.size(); l++) {
+		input_stream_cpp_in[l] = util_replace_into(input_stream_cpp_in[l], "{:batch_input_size:}", util_string_from_uint(batch_size * input_node->output_mem_req));
+		input_stream_cpp_in[l] = util_replace_into(input_stream_cpp_in[l], "{:batch_output_size:}", util_string_from_uint(batch_size * output_node->output_mem_req));
+		input_stream_cpp_in[l] = util_replace_into(input_stream_cpp_in[l], "{:network_address:}", "\"::\"");
+		input_stream_cpp_in[l] = util_replace_into(input_stream_cpp_in[l], "{:network_scope:}", util_string_from_uint(2));
+		input_stream_cpp_in[l] = util_replace_into(input_stream_cpp_in[l], "{:network_port:}", util_string_from_uint(6666));
+	}
+	std::stringstream input_stream_cpp_out;
+	input_stream_cpp_out << "src.out/input_stream.cpp";
+	util_file_write(input_stream_cpp_out.str().c_str(), input_stream_cpp_in);
 
 	sg_pos = 1;
 	printf("segment_groups_c %d\n", segment_groups_c);
